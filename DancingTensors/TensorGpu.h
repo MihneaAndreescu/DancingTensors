@@ -4,13 +4,16 @@
 #include "TensorGpuDataHelper.cuh"
 
 template<typename T> class TensorGpu {
-private:
+public:
 	std::vector<int> shape;
 	std::vector<int> product;
 	TensorGpuDataHelper<T> __data_helper;
 	void build_product_of_shape();
 public:
 	TensorGpu(std::vector<int> shape);
+
+	void fillWithZeroes(std::vector<int> shape);
+
 	T& v(std::vector<int>position);
 
 	std::vector<int> getShape();
@@ -18,6 +21,7 @@ public:
 
 	TensorGpu<T>& operator = (const TensorGpu<T>& other);
 	TensorGpu<T>& operator = (TensorGpu<T>&& other) noexcept;
+	void kill();
 };
 
 template class TensorGpu<float>;

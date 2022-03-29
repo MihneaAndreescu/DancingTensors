@@ -4,7 +4,7 @@
 
 
 template<typename T> class TensorCpu {
-private:
+public:
 	std::vector<int> shape;
 	std::vector<int> product;
 	T* __data;
@@ -12,6 +12,9 @@ private:
 	void build_product_of_shape();
 
 public:
+
+	void fillWithZeroes(std::vector<int> shape);
+
 	TensorCpu(std::vector<int> shape);
 	T& v(std::vector<int>position);
 
@@ -20,6 +23,8 @@ public:
 
 	TensorCpu<T>& operator = (const TensorCpu<T>& other);
 	TensorCpu<T>& operator = (TensorCpu<T>&& other) noexcept;
+
+	void kill();
 };
 
 template class TensorCpu<float>;

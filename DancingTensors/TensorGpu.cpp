@@ -1,6 +1,7 @@
 #include "TensorGpu.h"
 #include "TensorGpuDataHelper.cuh"
 #include <vector>
+#include <iostream>
 
 
 template<typename T> void TensorGpu<T>::build_product_of_shape() {
@@ -16,6 +17,13 @@ template<typename T> void TensorGpu<T>::build_product_of_shape() {
 }
 
 
+template<typename T> void TensorGpu<T>::fillWithZeroes(std::vector<int> newShape) {
+	if (!shape.empty()) __data_helper.kill();
+	shape = newShape;
+	build_product_of_shape();
+	if (shape.empty()) return;
+	__data_helper.requestAndFillWithZeroesDataChunk(product[0]);
+}
 
 template<typename T> TensorGpu<T>::TensorGpu(std::vector<int> shape) : shape(shape) {
 	build_product_of_shape();
@@ -74,16 +82,23 @@ template<typename T> TensorGpu<T>& TensorGpu<T>::operator = (const TensorGpu<T>&
 
 template<typename T>TensorGpu<T>& TensorGpu<T>::operator = (TensorGpu<T>&& other) noexcept {
 	if (this == &other) return *this;
+	
 
+	
 	shape = std::exchange(other.shape, {});
 	product = std::exchange(other.product, {});
-
 
 
 	__data_helper.freeMyData();
 	__data_helper.requestDataChunk(product[0]);
 	__data_helper.copyData(other.__data_helper, product[0]);
-	other.__data_helper.kill();
+	if(!shape.empty()) other.__data_helper.kill();
 	
 	return *this;
+}
+
+template<typename T> void TensorGpu<T>::kill() {
+	if (!shape.empty()) __data_helper.kill();
+	shape = {};
+	product = {};
 }

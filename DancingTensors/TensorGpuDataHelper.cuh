@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include "cuda_runtime.h" // do I need those?
-#include "device_launch_parameters.h" // do I need those? 
 
-#include <stdio.h>
 #include <vector>
 
 template<typename T> class TensorGpuDataHelper {
@@ -11,7 +9,6 @@ private:
 	T* __data;
 public:
 	void kill() {
-
 		hasData = false;
 		__data = nullptr;
 	}
@@ -56,7 +53,3 @@ public:
 		}
 	}
 };
-
-namespace Cuda {
-	void wrapper(void);
-}

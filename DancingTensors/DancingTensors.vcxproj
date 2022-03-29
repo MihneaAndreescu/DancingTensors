@@ -84,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KillIf.h" />
+    <ClInclude Include="Tensor.h" />
     <ClInclude Include="TensorCpu.h" />
     <ClInclude Include="TensorGpu.h" />
     <ClInclude Include="TensorGpuDataHelper.cuh" />

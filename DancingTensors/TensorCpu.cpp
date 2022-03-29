@@ -15,6 +15,16 @@ template<typename T> void TensorCpu<T>::build_product_of_shape() {
 }
 
 
+template<typename T> void TensorCpu<T>::fillWithZeroes(std::vector<int> newShape) {
+	if (!shape.empty()) free(__data);
+	shape = newShape;
+	build_product_of_shape();
+	if (shape.empty()) return;
+	__data = (T*)malloc(product[0] * sizeof(T));
+	for (int i = 0; i < product[0]; i++) {
+		__data[i] = 0;
+	}
+}
 
 template<typename T> TensorCpu<T>::TensorCpu(std::vector<int> shape) : shape(shape) {
 	build_product_of_shape();
@@ -62,9 +72,11 @@ template<typename T> TensorCpu<T>::TensorCpu(const TensorCpu<T>& other) {
 
 template<typename T> TensorCpu<T>& TensorCpu<T>::operator = (const TensorCpu<T>& other) {
 	if (this == &other) return *this;
+
+	if(!shape.empty()) free(__data);
 	shape = other.shape;
 	product = other.product;
-	free(__data);
+	
 	if (shape.empty()) return *this;
 	__data = (T*)malloc(product[0] * sizeof(T));
 	for (int i = 0; i < product[0]; i++) {
@@ -76,10 +88,18 @@ template<typename T> TensorCpu<T>& TensorCpu<T>::operator = (const TensorCpu<T>&
 template<typename T>TensorCpu<T>& TensorCpu<T>::operator = (TensorCpu<T>&& other) noexcept {
 	if (this == &other) return *this;
 
-	free(__data);
+
+	if (!shape.empty()) free(__data);
 	__data = std::exchange(other.__data, nullptr);
 	shape = std::exchange(other.shape, {});
 	product = std::exchange(other.product, {});
 
 	return *this;
+}
+
+template<typename T> void TensorCpu<T>::kill() {
+	if (!shape.empty()) free(__data);
+	shape = {};
+	product = {};
+	
 }
