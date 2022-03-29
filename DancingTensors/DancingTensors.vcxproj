@@ -77,16 +77,19 @@
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CudaCompile Include="kernel.cu" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="KillIfcpp.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="TensorCpu.cpp" />
+    <ClCompile Include="TensorGpu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KillIf.h" />
     <ClInclude Include="TensorCpu.h" />
+    <ClInclude Include="TensorGpu.h" />
+    <ClInclude Include="TensorGpuDataHelper.cuh" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="TensorGpuDataHelper.cu" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
