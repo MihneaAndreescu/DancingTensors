@@ -79,6 +79,15 @@
   <ItemGroup>
     <CudaCompile Include="kernel.cu" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="KillIfcpp.cpp" />
+    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="TensorCpu.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="KillIf.h" />
+    <ClInclude Include="TensorCpu.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.3.targets" />
