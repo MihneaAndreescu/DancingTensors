@@ -13,9 +13,14 @@ private:
 	TensorGpu<T> tensorGpu;
 
 public:
+
+	void setCurrentTensorToZeroes();
+
+	void setNormalDistribution(T low, T high);
+
 	DeviceType getDeviceType();
 
-	Tensor(DeviceType device, std::vector<int> shape);
+	Tensor(std::vector<int> shape, DeviceType device);
 
 	T& v(std::vector<int>position);
 
@@ -28,6 +33,9 @@ public:
 	Tensor<T>& operator = (Tensor<T>&& other) noexcept;
 
 	void toDevice(DeviceType newDevice);
+
+	void fillWithZeroes(std::vector<int> shape);
+
 };
 
 template class Tensor<float>;

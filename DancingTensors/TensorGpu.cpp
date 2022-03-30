@@ -2,8 +2,24 @@
 #include "TensorGpuDataHelper.cuh"
 #include <vector>
 #include <iostream>
+#include <random>
 
+template<typename T> void TensorGpu<T>::setCurrentTensorToZeroes() {
+	if (shape.empty()) return;
+	for (int i = 0; i < product[i]; i++) {
+		__data_helper.__data[i] = 0;
+	}
+}
 
+template<typename T> void TensorGpu<T>::setNormalDistribution(T low, T high) {
+	std::mt19937 rng(0);
+
+	if (shape.empty()) return;
+	std::normal_distribution<T> distribution(low, high);
+	for (int i = 0; i < product[i]; i++) {
+		__data_helper.__data[i] = distribution(rng);
+	}
+}
 template<typename T> void TensorGpu<T>::build_product_of_shape() {
 	if (shape.empty()) {
 		product.clear();
@@ -68,7 +84,6 @@ template<typename T> TensorGpu<T>::TensorGpu(const TensorGpu<T>& other) {
 }
 
 template<typename T> TensorGpu<T>& TensorGpu<T>::operator = (const TensorGpu<T>& other) {
-	std::cout << "copy\n";
 	if (this == &other) return *this;
 	shape = other.shape;
 	product = other.product;
@@ -82,22 +97,21 @@ template<typename T> TensorGpu<T>& TensorGpu<T>::operator = (const TensorGpu<T>&
 }
 
 template<typename T>TensorGpu<T>& TensorGpu<T>::operator = (TensorGpu<T>&& other) noexcept {
-	std::cout << "move\n";
 	if (this == &other) return *this;
-	
+
 	bool is_empty = other.shape.empty();
-	
+
 	shape = std::exchange(other.shape, {});
 	product = std::exchange(other.product, {});
 
-	
+
 	__data_helper.freeMyData();
 
-	if(!is_empty) __data_helper.requestDataChunk(product[0]);
+	if (!is_empty) __data_helper.requestDataChunk(product[0]);
 	if (!is_empty) __data_helper.__data = std::exchange(other.__data_helper.__data, nullptr);
 
-	if(!is_empty) other.__data_helper.kill();
-	
+	if (!is_empty) other.__data_helper.kill();
+
 	return *this;
 }
 

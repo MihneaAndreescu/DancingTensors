@@ -10,6 +10,8 @@ public:
 	TensorGpuDataHelper<T> __data_helper;
 	void build_product_of_shape();
 public:
+	void setCurrentTensorToZeroes();
+	void setNormalDistribution(T low, T high);
 	TensorGpu(std::vector<int> shape);
 
 	void fillWithZeroes(std::vector<int> shape);

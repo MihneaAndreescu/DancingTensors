@@ -12,6 +12,8 @@ public:
 	void build_product_of_shape();
 
 public:
+	void setCurrentTensorToZeroes();
+	void setNormalDistribution(T low, T high);
 
 	void fillWithZeroes(std::vector<int> shape);
 

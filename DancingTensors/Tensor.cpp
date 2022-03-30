@@ -4,10 +4,34 @@
 #include "TensorGpu.h"
 #include "Tensor.h"
 
+template<typename T> void Tensor<T>::setCurrentTensorToZeroes() {
+	if (device == DeviceType::CPU) {
+		tensorCpu.setCurrentTensorToZeroes();
+		return;
+	}
+	if (device == DeviceType::GPU) {
+		tensorGpu.setCurrentTensorToZeroes();
+		return;
+	}
+	killIf(true, "device type not supported");
+}
+
+template<typename T> void Tensor<T>::setNormalDistribution(T low, T high) {
+	if (device == DeviceType::CPU) {
+		tensorCpu.setNormalDistribution(low, high);
+		return;
+	}
+	if (device == DeviceType::GPU) {
+		tensorGpu.setNormalDistribution(low, high);
+		return;
+	}
+	killIf(true, "device type not supported");
+}
+
 template<typename T> DeviceType Tensor<T>::getDeviceType() {
 	return device;
 }
-template<typename T> Tensor<T>::Tensor(DeviceType device, std::vector<int> shape) :
+template<typename T> Tensor<T>::Tensor(std::vector<int> shape, DeviceType device) :
 	tensorCpu({}),
 	tensorGpu({}),
 	device(device) {
@@ -63,7 +87,7 @@ template<typename T> Tensor<T>& Tensor<T>::operator = (const Tensor<T>& other) {
 
 template<typename T> Tensor<T>& Tensor<T>::operator = (Tensor<T>&& other) noexcept { // doubt here
 	if (this == &other) return *this;
-	
+
 	device = std::move(other.device);
 	tensorCpu = std::move(other.tensorCpu);
 	tensorGpu = std::move(other.tensorGpu);
@@ -110,4 +134,16 @@ template<typename T> void Tensor<T>::toDevice(DeviceType newDevice) {
 		killIf(true, "invalid device chane type");
 	}
 	killIf(true, "invalid device chane type");
+}
+
+template<typename T> void Tensor<T>::fillWithZeroes(std::vector<int> shape) {
+	if (device == DeviceType::CPU) {
+		tensorCpu.fillWithZeroes(shape);
+		return;
+	}
+	if (device == DeviceType::GPU) {
+		tensorGpu.fillWithZeroes(shape);
+		return;
+	}
+	killIf(true, "device type not supported");
 }

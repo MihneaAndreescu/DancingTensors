@@ -1,6 +1,31 @@
 #include "TensorCpu.h"
+#include <iostream>
 #include <vector>
+#include <cassert>
+#include <random>
+#include <chrono>
+#include <iomanip>
+#include <fstream>
+#include <algorithm>
+#include <numeric>
+using namespace std;
 
+template<typename T> void TensorCpu<T>::setCurrentTensorToZeroes() {
+	if (shape.empty()) return;
+	for (int i = 0; i < product[0]; i++) {
+		__data[i] = 0;
+	}
+}
+
+template<typename T> void TensorCpu<T>::setNormalDistribution(T low, T high) {
+
+	mt19937 rng(0);
+	normal_distribution<T> distribution(low, high);
+	if (shape.empty()) return;
+	for (int i = 0; i < product[0]; i++) {
+		__data[i] = distribution(rng);
+	}
+}
 
 template<typename T> void TensorCpu<T>::build_product_of_shape() {
 	if (shape.empty()) {
@@ -73,10 +98,10 @@ template<typename T> TensorCpu<T>::TensorCpu(const TensorCpu<T>& other) {
 template<typename T> TensorCpu<T>& TensorCpu<T>::operator = (const TensorCpu<T>& other) {
 	if (this == &other) return *this;
 
-	if(!shape.empty()) free(__data);
+	if (!shape.empty()) free(__data);
 	shape = other.shape;
 	product = other.product;
-	
+
 	if (shape.empty()) return *this;
 	__data = (T*)malloc(product[0] * sizeof(T));
 	for (int i = 0; i < product[0]; i++) {
@@ -101,5 +126,5 @@ template<typename T> void TensorCpu<T>::kill() {
 	if (!shape.empty()) free(__data);
 	shape = {};
 	product = {};
-	
+
 }

@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "cuda_runtime.h" // do I need those?
-
 #include <vector>
 
 template<typename T> class TensorGpuDataHelper {
