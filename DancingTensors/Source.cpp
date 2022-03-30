@@ -12,13 +12,29 @@ TensorGpu<double> f(TensorGpu<double> guy) {
 }
 
 Tensor<double> zol(Tensor<double> shit) {
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			shit.v({ i, j })++;
+		}
+	}
 	return shit;
 }
 
 int main() {
 	Tensor<double> myTensor(DeviceType::CPU, { 5, 5 });
 	Tensor<double> sec(DeviceType::CPU, { 5, 5 });
-	//myTensor = sec;
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			sec.v({ i, j }) = (i + j) % 2;
+		}
+	}
+	myTensor = zol(sec);
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			cout << myTensor.v({ i, j }) << " ";
+		}
+		cout << "\n";
+	}
 	cout << "done\n";
 	exit(0);
 	myTensor.v({ 3, 3 }) = 6;

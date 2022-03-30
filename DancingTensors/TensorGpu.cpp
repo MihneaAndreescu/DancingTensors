@@ -85,16 +85,18 @@ template<typename T>TensorGpu<T>& TensorGpu<T>::operator = (TensorGpu<T>&& other
 	std::cout << "move\n";
 	if (this == &other) return *this;
 	
-
+	bool is_empty = other.shape.empty();
 	
 	shape = std::exchange(other.shape, {});
 	product = std::exchange(other.product, {});
 
-
+	
 	__data_helper.freeMyData();
-	__data_helper.requestDataChunk(product[0]);
-	__data_helper.copyData(other.__data_helper, product[0]);
-	if(!shape.empty()) other.__data_helper.kill();
+
+	if(!is_empty) __data_helper.requestDataChunk(product[0]);
+	if (!is_empty) __data_helper.__data = std::exchange(other.__data_helper.__data, nullptr);
+
+	if(!is_empty) other.__data_helper.kill();
 	
 	return *this;
 }

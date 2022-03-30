@@ -49,6 +49,7 @@ template<typename T> Tensor<T>::Tensor(const Tensor<T>& other) :
 }
 
 template<typename T> Tensor<T>& Tensor<T>::operator = (const Tensor<T>& other) {
+	if (this == &other) return *this;
 
 	tensorCpu.kill();
 	tensorGpu.kill();
@@ -61,10 +62,13 @@ template<typename T> Tensor<T>& Tensor<T>::operator = (const Tensor<T>& other) {
 }
 
 template<typename T> Tensor<T>& Tensor<T>::operator = (Tensor<T>&& other) noexcept { // doubt here
-	device = other.device;
+	if (this == &other) return *this;
+	
+	device = std::move(other.device);
+	tensorCpu = std::move(other.tensorCpu);
+	tensorGpu = std::move(other.tensorGpu);
 
-	tensorCpu = other.tensorCpu;
-	tensorGpu = other.tensorGpu;
+	std::cout << "done\n";
 	return *this;
 }
 template<typename T> void Tensor<T>::toDevice(DeviceType newDevice) {

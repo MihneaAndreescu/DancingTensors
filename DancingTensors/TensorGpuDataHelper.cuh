@@ -4,7 +4,7 @@
 #include <vector>
 
 template<typename T> class TensorGpuDataHelper {
-private:
+public:
 	bool hasData = false;
 	T* __data;
 public:
