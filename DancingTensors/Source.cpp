@@ -30,8 +30,13 @@ public:
 	virtual void setNormalDistribution(T low, T high) = 0;
 };
 
+template<typename T> pair<T, Tensor<T>> evalL2Loss(Tensor<T> a, Tensor<T> b) {
+	T loss = L2Loss(a, b);
+	Tensor<T> ad = getL2LossDerivative(a, b);
+	return { loss, ad };
+}
 
-template<typename T> class dotVectorMatrixBox : public BoxInterface<T> {
+template<typename T> class DotVectorMatrixBox : public BoxInterface<T> {
 private:
 	int input_dim;
 	int output_dim;
@@ -48,7 +53,7 @@ public:
 	DeviceType getDeviceType() override { return device; }
 
 
-	dotVectorMatrixBox(int input_dim, int output_dim, bool compute_gradients, DeviceType device) :
+	DotVectorMatrixBox(int input_dim, int output_dim, bool compute_gradients, DeviceType device) :
 		input_dim(input_dim),
 		output_dim(output_dim),
 		compute_gradients(compute_gradients),
@@ -138,12 +143,44 @@ public:
 
 };
 
+
 int main() {
-	dotVectorMatrixBox<double> learner(10, 20, true, DeviceType::CPU);
+	DotVectorMatrixBox<double> learner(10, 20, true, DeviceType::CPU);
+	learner.setNormalDistribution(0, 1);
 
 	Tensor<double> input({ 4, 10 }, DeviceType::CPU);
+	input.setNormalDistribution(0, 1);
+
+	Tensor<double> want({ 4, 20 }, DeviceType::CPU);
+	want.setNormalDistribution(0, 1);
+
 	Tensor<double> output = learner.forward(input);
 
+	cout << output.getShape() << " " << want.getShape() << "\n";
 
-	cout << learner.forward(Tensor<double> { { 4, 10 }, DeviceType::CPU}).getShape() << "\n";
+	double loss = evalL2Loss<double>(output, want).first;
+
+	cout << loss << "\n";
+
+	for (int tc = 1; 1; tc++) {
+
+		learner.backProp(evalL2Loss(output, want).second);
+		learner.gradientDescentSGD(1e-3);
+		learner.resetDerivatives();
+
+		output = learner.forward(input);
+		cout << "new loss = " << evalL2Loss<double>(output, want).first << "\n";
+	}
+	exit(0);
+
+	//Tensor<double> output = learner.forward(input);
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 20; j++) {
+			cout << output.v({ i, j }) << " ";
+		}
+		cout << "\n";
+	}
+
+	//cout << learner.forward(Tensor<double> { { 4, 10 }, DeviceType::CPU}).getShape() << "\n";
 }

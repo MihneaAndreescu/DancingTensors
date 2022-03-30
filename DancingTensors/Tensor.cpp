@@ -4,6 +4,8 @@
 #include "TensorGpu.h"
 #include "Tensor.h"
 
+
+
 template<typename T> void Tensor<T>::setCurrentTensorToZeroes() {
 	if (device == DeviceType::CPU) {
 		tensorCpu.setCurrentTensorToZeroes();
