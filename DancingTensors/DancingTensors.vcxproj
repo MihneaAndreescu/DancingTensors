@@ -79,6 +79,7 @@
   <ItemGroup>
     <ClCompile Include="KillIfcpp.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Tensor.cpp" />
     <ClCompile Include="TensorCpu.cpp" />
     <ClCompile Include="TensorGpu.cpp" />
   </ItemGroup>

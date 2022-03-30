@@ -68,6 +68,7 @@ template<typename T> TensorGpu<T>::TensorGpu(const TensorGpu<T>& other) {
 }
 
 template<typename T> TensorGpu<T>& TensorGpu<T>::operator = (const TensorGpu<T>& other) {
+	std::cout << "copy\n";
 	if (this == &other) return *this;
 	shape = other.shape;
 	product = other.product;
@@ -81,6 +82,7 @@ template<typename T> TensorGpu<T>& TensorGpu<T>::operator = (const TensorGpu<T>&
 }
 
 template<typename T>TensorGpu<T>& TensorGpu<T>::operator = (TensorGpu<T>&& other) noexcept {
+	std::cout << "move\n";
 	if (this == &other) return *this;
 	
 

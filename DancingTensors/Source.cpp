@@ -18,6 +18,9 @@ Tensor<double> zol(Tensor<double> shit) {
 int main() {
 	Tensor<double> myTensor(DeviceType::CPU, { 5, 5 });
 	Tensor<double> sec(DeviceType::CPU, { 5, 5 });
+	//myTensor = sec;
+	cout << "done\n";
+	exit(0);
 	myTensor.v({ 3, 3 }) = 6;
 	sec = zol(myTensor);
 	sec.v({ 2, 2 }) = 9;

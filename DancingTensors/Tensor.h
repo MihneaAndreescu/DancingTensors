@@ -17,14 +17,17 @@ public:
 	DeviceType getDeviceType();
 
 	Tensor(DeviceType device, std::vector<int> shape);
-	Tensor(const Tensor<T>& other);
 
 	T& v(std::vector<int>position);
+
 	std::vector<int> getShape();
-	
+
+	Tensor(const Tensor<T>& other);
+
 	Tensor<T>& operator = (const Tensor<T>& other);
-	Tensor<T>& operator = (Tensor<T>&& other); // my code is wrong here
-	
+
+	Tensor<T>& operator = (Tensor<T>&& other) noexcept;
+
 	void toDevice(DeviceType newDevice);
 };
 

@@ -1,5 +1,3 @@
-#pragma once
-#pragma once
 #include <vector>
 #include "KillIf.h"
 #include "TensorCpu.h"
@@ -61,6 +59,7 @@ template<typename T> Tensor<T>& Tensor<T>::operator = (const Tensor<T>& other) {
 
 	return *this;
 }
+
 template<typename T> Tensor<T>& Tensor<T>::operator = (Tensor<T>&& other) noexcept { // doubt here
 	device = other.device;
 
@@ -68,7 +67,7 @@ template<typename T> Tensor<T>& Tensor<T>::operator = (Tensor<T>&& other) noexce
 	tensorGpu = other.tensorGpu;
 	return *this;
 }
-template<typename T> void toDevice(DeviceType newDevice) {
+template<typename T> void Tensor<T>::toDevice(DeviceType newDevice) {
 	if (device == newDevice) return;
 	if (device == DeviceType::CPU) {
 		if (newDevice == DeviceType::GPU) {
@@ -108,8 +107,3 @@ template<typename T> void toDevice(DeviceType newDevice) {
 	}
 	killIf(true, "invalid device chane type");
 }
-
-
-template class Tensor<float>;
-template class Tensor<double>;
-template class Tensor<long double>;
