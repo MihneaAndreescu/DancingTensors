@@ -16,14 +16,6 @@ Tensor<double> zol(Tensor<double> shit) {
 }
 
 int main() {
-	/*TensorCpu<double> shit({10, 10});
-	shit.v({ 1, 0 }) = 33;
-	cout << shit.v({ 1, 0 }) << "\n";
-	shit.kill();
-	vector<int> shape = shit.getShape();
-	for (auto& x : shape) cout << x << " ";
-	cout << "\n";
-	exit(0);*/
 	Tensor<double> myTensor(DeviceType::CPU, { 5, 5 });
 	Tensor<double> sec(DeviceType::CPU, { 5, 5 });
 	myTensor.v({ 3, 3 }) = 6;
@@ -48,7 +40,7 @@ int main() {
 		cout << "\n";
 	}
 	exit(0);
-	
+
 
 	TensorGpu<double> a({ 5, 2 });
 	TensorGpu<double> b({ 6, 1 });
