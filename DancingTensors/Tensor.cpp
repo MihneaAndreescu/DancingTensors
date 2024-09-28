@@ -111,7 +111,6 @@ template<typename T> void Tensor<T>::toDevice(DeviceType newDevice) {
 				}
 			}
 			tensorCpu.kill();
-
 			device = newDevice;
 			return;
 		}

@@ -8,6 +8,9 @@ public:
 	std::vector<int> shape;
 	std::vector<int> product;
 	T* __data;
+	// shape = {7, 8, 9}
+	// prod = {  7 * 8 * 9,  8 * 9, 9}
+	// { x, y, z } = x * 8 * 9 + y * 9 + z = p[i] * prod[i + 1] + p.back()
 
 	void build_product_of_shape();
 

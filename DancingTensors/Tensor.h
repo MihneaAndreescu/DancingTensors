@@ -6,7 +6,11 @@
 
 enum class DeviceType { CPU, GPU, TPU };
 
-template<typename T> class Tensor {
+template<typename T> class ITensor {
+
+};
+
+template<typename T> class Tensor { // refactory cu pointeri classITensor
 public:
 	DeviceType device;
 	TensorCpu<T> tensorCpu;

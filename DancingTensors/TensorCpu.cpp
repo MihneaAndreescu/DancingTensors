@@ -113,12 +113,11 @@ template<typename T> TensorCpu<T>& TensorCpu<T>::operator = (const TensorCpu<T>&
 template<typename T>TensorCpu<T>& TensorCpu<T>::operator = (TensorCpu<T>&& other) noexcept {
 	if (this == &other) return *this;
 
-
 	if (!shape.empty()) free(__data);
 	__data = std::exchange(other.__data, nullptr);
 	shape = std::exchange(other.shape, {});
 	product = std::exchange(other.product, {});
-
+	
 	return *this;
 }
 
